@@ -36,12 +36,11 @@ const getSubscriptions = async function getSubscriptions() {
  * Call getUserChat Example
  */
 
-
-  async function getLastCount() {
-    const { data, error } = await supabase
+async function getLastCount() {
+  const { data, error } = await supabase
     .from("Subscriptions")
     .select("sub_number")
-    .order("created_at", { ascending: false })  // Assuming you have a created_at or id column to sort by
+    .order("created_at", { ascending: false }) // Assuming you have a created_at or id column to sort by
     .limit(1);
 
   if (error) {
@@ -59,15 +58,36 @@ const getSubscriptions = async function getSubscriptions() {
 }
 
 async function getUserCount(user_id) {
-const { data, error } = await supabase
-  .from('Subscriptions')
-  .select('sub_number')
-  .eq('user_id', user_id);
+  const { data, error } = await supabase
+    .from("Subscriptions")
+    .select("sub_number")
+    .eq("user_id", user_id);
 
-if (error) {
-  console.error('Error fetching sub_number:', error);
-} else {
-  console.log('Sub number:', data);
-  return data[0].sub_number;
-}}
-exports.getAllSubscriptions= { getSubscriptions,getUserCount ,getLastCount};
+  if (error) {
+    console.error("Error fetching sub_number:", error);
+  } else {
+    console.log("Sub number:", data);
+    return data[0].sub_number;
+  }
+}
+
+async function getIsActive(user_id) {
+  const { data, error } = await supabase
+    .from("Subscriptions")
+    .select("isActive")
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error("Error fetching isActive:", error);
+  } else {
+    console.log("isActive:", data);
+    return data[0].isActive;
+  }
+}
+
+exports.getAllSubscriptions = {
+  getSubscriptions,
+  getUserCount,
+  getLastCount,
+  getIsActive,
+};

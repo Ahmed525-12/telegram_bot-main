@@ -8,4 +8,9 @@ const addDaysToNow = () => {
   return timestampz;
 };
 
-exports.addDaysToNow=addDaysToNow;
+/**
+ * Call addDaysToNow Example
+ * addDaysToNow(); // Returns a timestamp with timezone
+ */
+
+exports.addDaysToNow = addDaysToNow;
