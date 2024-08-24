@@ -1,0 +1,20 @@
+{
+  "name": "telegram-subscriptions-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodman index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.1",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.4",
+    "telegraf": "^4.16.3"
+  }
+}
