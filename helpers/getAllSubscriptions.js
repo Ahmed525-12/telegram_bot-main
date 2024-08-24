@@ -25,12 +25,12 @@ const getSubscriptions = async function getSubscriptions() {
 //   return dataJson;
 // });
 
-async function getUserChat(user_id) {
-  const chatId = GROUP_CHAT_ID;
-  const userId = "user_id";
-  const chat = await bot.telegram.getChatMember(chatId, userId);
-  console.log(chat);
-}
+// async function getUserChat(user_id) {
+//   const chatId = GROUP_CHAT_ID;
+//   const userId = "user_id";
+//   const chat = await bot.telegram.getChatMember(chatId, userId);
+//   console.log(chat);
+// }
 
 /**
  * Call getUserChat Example
@@ -70,4 +70,4 @@ if (error) {
   console.log('Sub number:', data);
   return data[0].sub_number;
 }}
-exports.getAllSubscriptions= { getSubscriptions, getUserChat,getUserCount ,getLastCount};
+exports.getAllSubscriptions= { getSubscriptions,getUserCount ,getLastCount};

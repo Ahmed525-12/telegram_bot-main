@@ -1,14 +1,14 @@
 require("dotenv").config();
 const { createClient } = require("@supabase/supabase-js");
 const { Telegraf } = require("telegraf");
+const cron = require('node-cron');
 
-const { checkUniqueMember } = require("./helpers/checkUniqueMember");
 const { insertSubscription } = require("./helpers/insertSubscription");
 const { addDaysToNow } = require("./helpers/addDaysToNow");
 const { getAllSubscriptions} = require("./helpers/getAllSubscriptions");
-
+const { removeExpiredMembers} = require("./helpers/removeExpiredMembers");
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const GROUP_CHAT_ID = process.env.GROUP_CHAT_ID;
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -16,7 +16,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 
-let isActive = false;
 bot.help((ctx) => ctx.reply("نحن هنا لمساعدتك"));
 
 bot.start (async (ctx) => {
@@ -24,6 +23,7 @@ bot.start (async (ctx) => {
   const last_name = ctx.from.last_name;
   const user_name = ctx.from.username;
   const user_id = ctx.from.id;
+  let isActive = false;
  
   if (first_name === undefined && last_name === undefined) {
     if (user_name === undefined) {
@@ -51,6 +51,38 @@ bot.start (async (ctx) => {
     ctx.reply(`رقمك الشخصي هو: <b>${count}</b>`, { parse_mode: "HTML" });
   }
 });
+
+
+// _______________________________________________________________________RemoveMEber_______________________________________
+
+
+
+
+cron.schedule('0 0 * * *', () => {
+  console.log('Running removeExpiredMembers at midnight...');
+  
+  removeExpiredMembers().then((error) => {
+    if (error) {
+      console.error("Failed to process expired members:", error);
+      return;
+    }
+    console.log("Completed processing expired members.");
+  }).catch((err) => {
+    console.error("An error occurred during the execution of removeExpiredMembers:", err);
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 
 bot
   .launch()

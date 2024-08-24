@@ -1,8 +1,9 @@
 const { createClient } = require("@supabase/supabase-js");
+const { Telegraf } = require("telegraf");
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 
 const removeExpiredMembers = async function removeExpiredMembers() {
@@ -38,7 +39,7 @@ const removeExpiredMembers = async function removeExpiredMembers() {
     try {
       console.log(`Removing user ${member.user_id} from the group...`);
       await bot.telegram
-        .banChatMember(GROUP_CHAT_ID, member.user_id)
+        .banChatMember(process.env.GROUP_CHAT_ID, member.user_id)
         .then((data) => {
           console.log(
             `User ${member.user_id} has been removed from the group.`
@@ -47,17 +48,11 @@ const removeExpiredMembers = async function removeExpiredMembers() {
         });
     } catch (err) {
       console.error(
-        "Failed to remove user ${member.user_id} from the group:, err"
+        `Failed to remove user ${member.user_id} from the group:, err`
       );
     }
   }
 };
 
-removeExpiredMembers().then((error) => {
-  if (error) {
-    console.error("Failed to process expired members:", error);
-    return;
-  }
-  console.log("Completed processing expired members.");
-});
+
 exports.removeExpiredMembers= removeExpiredMembers;
