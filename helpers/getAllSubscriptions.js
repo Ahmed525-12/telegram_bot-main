@@ -52,8 +52,8 @@ async function getLastCount() {
   if (data.length > 0) {
     return data[0].sub_number;
   } else {
-    console.log("No data found");
-    return null;
+    console.log("No data found", data);
+    return 1;
   }
 }
 
@@ -75,14 +75,20 @@ async function getIsActive(user_id) {
   const { data, error } = await supabase
     .from("Subscriptions")
     .select("isActive")
-    .eq("user_id", user_id);
+    .eq("user_id", user_id)
+    .single();
 
   if (error) {
-    console.error("Error fetching isActive:", error);
-  } else {
-    console.log("isActive:", data);
-    return data[0].isActive;
+    console.error("Error fetching isActive: oR First Time user", error);
+    return false;
   }
+
+  if (!data) {
+    return false;
+  }
+
+  console.log("isActive:", data.isActive);
+  return data.isActive || false;
 }
 
 exports.getAllSubscriptions = {

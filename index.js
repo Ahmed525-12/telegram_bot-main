@@ -53,7 +53,7 @@ bot.start(async (ctx) => {
 
     // Reply to the user with their personal number
     ctx.reply(`أهلًا وسهلًا بك ${first_name} ${last_name} في الإنجاز البحثي`);
-    ctx.reply(`هذا هو رقمك الشخصي: ${lastCount}`);
+    ctx.reply(`هذا هو رقمك الشخصي: ${lastCount + 1}`);
 
     // Increment the count for the next user
     isActive = true;
@@ -79,7 +79,7 @@ bot.start(async (ctx) => {
 
 // __________________________________________________RemoveMember_______________________________________
 
-cron.schedule("* * * * * *", () => {
+cron.schedule("0 0 * * * *", () => {
   console.log("Running removeExpiredMembers at midnight...");
 
   removeExpiredMembers()
