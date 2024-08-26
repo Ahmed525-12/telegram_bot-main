@@ -12,7 +12,7 @@ const insertSubscription = async (
   last_name
 ) => {
   const { error } = await supabase
-    .from("Subscriptions") // Table name
+    .from("Subscriptions")
     .update([
       {
         first_name: first_name,
@@ -55,4 +55,24 @@ const insertSubNumber = async (user_id, sub_number) => {
   }
 };
 
-exports.insertSubscription = { insertSubscription, insertSubNumber };
+// update isActive to false
+
+const updateIsActive = async (user_id, isActive) => {
+  const { error } = await supabase
+    .from("Subscriptions")
+    .update({ isActive: isActive })
+    .eq("user_id", user_id);
+
+  if (error) {
+    console.error("Error updating data:", error);
+    return null;
+  } else {
+    console.log("Updated isActive to false");
+  }
+};
+
+exports.insertSubscription = {
+  insertSubscription,
+  insertSubNumber,
+  updateIsActive,
+};

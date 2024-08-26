@@ -53,7 +53,7 @@ async function getLastCount() {
     return data[0].sub_number;
   } else {
     console.log("No data found", data);
-    return 1;
+    return 0;
   }
 }
 
@@ -91,9 +91,45 @@ async function getIsActive(user_id) {
   return data.isActive || false;
 }
 
+// search if user exict with  user_id in subscriptions
+
+async function isUserExist(user_id) {
+  const { data, error } = await supabase
+    .from("Subscriptions")
+    .select("user_id")
+    .eq("user_id", user_id);
+
+  if (data.length > 0 && data !== null) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// get end subscription date
+
+async function IsSubscriptionEnd(user_id) {
+  const now = new Date();
+  const { data, error } = await supabase
+    .from("Subscriptions")
+    .select("subscription_end")
+    .eq("user_id", user_id)
+    .lte("subscription_end", now.toISOString());
+
+  if (error) {
+    console.error("Failed to fetch subscriptions:", error);
+    return false;
+  } else {
+    console.log("subscription_end:", data);
+    return true;
+  }
+}
+
 exports.getAllSubscriptions = {
   getSubscriptions,
   getUserCount,
   getLastCount,
   getIsActive,
+  isUserExist,
+  IsSubscriptionEnd,
 };
