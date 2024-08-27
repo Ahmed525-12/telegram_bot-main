@@ -3,6 +3,8 @@ require("dotenv").config();
 const { Telegraf } = require("telegraf");
 const cron = require("node-cron");
 
+const Keep_alive= require("./Keep_alive.js")
+
 const { insertSubscription } = require("./helpers/insertSubscription");
 const { addDaysToNow } = require("./helpers/addDaysToNow");
 const { getAllSubscriptions } = require("./helpers/getAllSubscriptions");
