@@ -17,7 +17,8 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 const RegistrationMessage =
   "شرفنا بصحبتك الرائعة، ونرجو لك رحلة نافعة تقطع بها فيافي البحث لتسليمه، وتتويجك بإذن الله في قاعات المناقشة🎓";
 
-
+  const GreetingMessage =
+  "حيّا هلًا بك🌻\nفي بيئة الإنجاز البحثي التحفيزية والتفاعلية، نسير معاً في ركب واحد، عزيمة الفرد منا وقود المجتمع، وإذا تراخت همة أحدنا تداعت له سائر الأعضاء، فخذت بيده وشدّدت من عزيمته.";
 
 bot.start(async (ctx) => {
   const first_name = ctx.from.first_name || "غير معرف";
@@ -59,7 +60,7 @@ bot.start(async (ctx) => {
     // Reply to the user with their personal number
     ctx.reply(RegistrationMessage);
     ctx.reply(`هذا هو رقمك الشخصي: ${lastCount + 1} \n\nرابط الهدية من الإنجاز البحثي:\nhttps://drive.google.com/file/d/1K-pZbE9YHr_GAJsoi-3XGclzpzJnR-5J/view?usp=share_link`);
-
+    ctx.reply(GreetingMessage);
    
     // Increment the count for the next user
     isActive = true;
