@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { createClient } = require("@supabase/supabase-js");
+
 const { Telegraf } = require("telegraf");
 const cron = require("node-cron");
 
@@ -7,20 +7,17 @@ const { insertSubscription } = require("./helpers/insertSubscription");
 const { addDaysToNow } = require("./helpers/addDaysToNow");
 const { getAllSubscriptions } = require("./helpers/getAllSubscriptions");
 const { removeExpiredMembers } = require("./helpers/removeExpiredMembers");
+const { quitMessageMember } = require("./helpers/quitMember");
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_KEY;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const GreetingMessage =
-  "حيّا هلًا بك🌻\nفي بيئة الإنجاز البحثي التحفيزية والتفاعلية، نسير معاً في ركب واحد، عزيمة الفرد منا وقود المجتمع، وإذا تراخت همة أحدنا تداعت له سائر الأعضاء، فخذت بيده وشدّدت من عزيمته.";
+
+
 
 const RegistrationMessage =
   "شرفنا بصحبتك الرائعة، ونرجو لك رحلة نافعة تقطع بها فيافي البحث لتسليمه، وتتويجك بإذن الله في قاعات المناقشة🎓";
 
-const RemoveMessage =
-  "لقد بلغ بنا الطريق نهايته 👋🛣\nومازالت لرحلتنا بقية وأيادينا مرحبة بأصدقاء الإنجاز البحثي، فإذا رغبت بتجديد اشتراك نأمل التواصل معنا عبر الواتس آب: \n00966556673350\nوإذا اخترت المضي دون صحبتنا فلا تنس مشاركتنا خبر إنجازك وتسليم رسالتك..\n\nدمت بخير🌻";
+
 
 bot.start(async (ctx) => {
   const first_name = ctx.from.first_name || "غير معرف";
@@ -61,8 +58,9 @@ bot.start(async (ctx) => {
 
     // Reply to the user with their personal number
     ctx.reply(RegistrationMessage);
-    ctx.reply(`هذا هو رقمك الشخصي: ${lastCount + 1}`);
+    ctx.reply(`هذا هو رقمك الشخصي: ${lastCount + 1} \n\nرابط الهدية من الإنجاز البحثي:\nhttps://drive.google.com/file/d/1K-pZbE9YHr_GAJsoi-3XGclzpzJnR-5J/view?usp=share_link`);
 
+   
     // Increment the count for the next user
     isActive = true;
 
@@ -89,6 +87,21 @@ bot.start(async (ctx) => {
 
 cron.schedule("0 0 * * * *", () => {
   console.log("Running removeExpiredMembers at midnight...");
+  quitMessageMember().then((error) => {
+    if (error) {
+      console.error("Failed to process Send a message to members:", error);
+      return;
+    }
+   
+    console.log("Completed processing Send a message to members.");
+  })
+  .catch((err) => {
+    console.error(
+      "An error occurred during the execution of removeExpiredMembers:",
+      err
+    );
+  });
+
 
   removeExpiredMembers()
     .then((error) => {
@@ -104,12 +117,16 @@ cron.schedule("0 0 * * * *", () => {
         "An error occurred during the execution of removeExpiredMembers:",
         err
       );
+
+
+ 
     });
 });
 
 bot.command("renew", async (ctx) => {
   ctx.reply("contact us : 00966556673350");
 });
+
 
 bot
   .launch()
