@@ -33,13 +33,14 @@ const removeExpiredMembers = async function removeExpiredMembers() {
       `User ID: ${member.user_id}, Subscription End Date: ${member.subscription_end}  `
     );
   });
-
+  const groupIds = [process.env.GROUP_CHAT_ID_1, process.env.GROUP_CHAT_ID_2, /* add more group IDs as needed */];
+  for (const groupId of groupIds) {
   // Process each expired member
   for (const member of members) {
     try {
       console.log(`Removing user ${member.user_id} from the group...`);
       await bot.telegram
-        .banChatMember(process.env.GROUP_CHAT_ID, member.user_id)
+        .banChatMember(groupId, member.user_id)
         .then((data) => {
           console.log(
             `User ${member.user_id} has been removed from the group.`
@@ -51,7 +52,7 @@ const removeExpiredMembers = async function removeExpiredMembers() {
         `Failed to remove user ${member.user_id} from the group:, err`
       );
     }
-  }
+  }}
 };
 
 
