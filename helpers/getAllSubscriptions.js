@@ -40,7 +40,7 @@ async function getLastCount() {
   const { data, error } = await supabase
     .from("Subscriptions")
     .select("sub_number")
-    .order("created_at", { ascending: false }) // Assuming you have a created_at or id column to sort by
+    .order("sub_number", { ascending: false }) // Assuming you have a created_at or id column to sort by
     .limit(1);
 
   if (error) {
